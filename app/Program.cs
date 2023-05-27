@@ -186,6 +186,8 @@ namespace GHelper
                 settingsForm.Activate();
                 settingsForm.VisualiseGPUMode();
 
+                settingsForm.ScreenButtons_SetState(!RefreshRateEnforcer.IsEnforced());
+
                 switch (action)
                 {
                     case "gpu":
