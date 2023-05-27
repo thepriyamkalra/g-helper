@@ -49,6 +49,7 @@ namespace GHelper
             panelFooter = new Panel();
             buttonQuit = new RButton();
             checkStartup = new CheckBox();
+            checkEnforceRefreshRate = new CheckBox();
             panelPerformance = new Panel();
             picturePerf = new PictureBox();
             labelPerf = new Label();
@@ -360,7 +361,7 @@ namespace GHelper
             checkStartup.TabIndex = 17;
             checkStartup.Text = Properties.Strings.RunOnStartup;
             checkStartup.UseVisualStyleBackColor = true;
-            // 
+            //
             // panelPerformance
             // 
             panelPerformance.AutoSize = true;
@@ -752,7 +753,7 @@ namespace GHelper
             // labelTipScreen
             // 
             labelTipScreen.ForeColor = SystemColors.GrayText;
-            labelTipScreen.Location = new Point(20, 135);
+            labelTipScreen.Location = new Point(160, 140);
             labelTipScreen.Margin = new Padding(4, 0, 4, 0);
             labelTipScreen.Name = "labelTipScreen";
             labelTipScreen.Size = new Size(760, 36);
@@ -772,6 +773,7 @@ namespace GHelper
             tableScreen.Controls.Add(button60Hz, 1, 0);
             tableScreen.Controls.Add(button120Hz, 2, 0);
             tableScreen.Controls.Add(buttonMiniled, 3, 0);
+            tableScreen.Controls.Add(checkEnforceRefreshRate, 0, 1);
             tableScreen.Location = new Point(16, 51);
             tableScreen.Margin = new Padding(8, 4, 8, 4);
             tableScreen.Name = "tableScreen";
@@ -837,6 +839,14 @@ namespace GHelper
             button120Hz.TabIndex = 2;
             button120Hz.Text = "120Hz + OD";
             button120Hz.UseVisualStyleBackColor = false;
+            // 
+            // checkEnforceRefreshRate
+            // 
+            checkEnforceRefreshRate.AutoSize = true;
+            checkEnforceRefreshRate.ForeColor = SystemColors.ControlLightLight;
+            checkEnforceRefreshRate.Name = "checkEnforceRefreshRate";
+            checkEnforceRefreshRate.Text = "Enforce";
+            checkEnforceRefreshRate.Margin = new Padding(8);
             // 
             // buttonMiniled
             // 
@@ -1094,6 +1104,7 @@ namespace GHelper
         private Panel panelFooter;
         private RButton buttonQuit;
         private CheckBox checkStartup;
+        private CheckBox checkEnforceRefreshRate;
         private Panel panelPerformance;
         private PictureBox picturePerf;
         private Label labelPerf;

@@ -74,6 +74,8 @@ namespace GHelper
             buttonScreenAuto.Click += ButtonScreenAuto_Click;
             buttonMiniled.Click += ButtonMiniled_Click;
 
+            checkEnforceRefreshRate.CheckedChanged += CheckEnforceRefreshRate_CheckedChanged;
+
             buttonQuit.Click += ButtonQuit_Click;
 
             buttonKeyboardColor.Click += ButtonKeyboardColor_Click;
@@ -544,6 +546,10 @@ namespace GHelper
 
         private void ButtonScreenAuto_Click(object? sender, EventArgs e)
         {
+            checkEnforceRefreshRate.Checked = true; // Cosmetic; doesn't really matter if it's checked or not
+            checkEnforceRefreshRate.Enabled = false;
+            RefreshRateEnforcer.Disable();
+
             AppConfig.setConfig("screen_auto", 1);
             InitScreen();
             AutoScreen();
@@ -773,14 +779,42 @@ namespace GHelper
 
         private void Button120Hz_Click(object? sender, EventArgs e)
         {
+            checkEnforceRefreshRate.Checked = false;
+            checkEnforceRefreshRate.Enabled = true;
             AppConfig.setConfig("screen_auto", 0);
             SetScreen(1000, 1);
         }
 
         private void Button60Hz_Click(object? sender, EventArgs e)
         {
+            checkEnforceRefreshRate.Checked = false;
+            checkEnforceRefreshRate.Enabled = true;
             AppConfig.setConfig("screen_auto", 0);
             SetScreen(60, 0);
+        }
+
+        private void CheckEnforceRefreshRate_CheckedChanged(object? sender, EventArgs e)
+        {
+            if (sender is null) return;
+            CheckBox chk = (CheckBox) sender;
+
+            if (chk.Checked)
+            {
+                RefreshRateEnforcer.Enable(NativeMethods.GetRefreshRate());
+                ScreenButtons_SetState(false);
+            }
+            else
+            {
+                RefreshRateEnforcer.Disable();
+                ScreenButtons_SetState(true);
+            }
+        }
+
+        public void ScreenButtons_SetState(bool state) {
+                RButton[] buttons = {buttonScreenAuto, button60Hz, button120Hz};
+                foreach (RButton button in buttons) {
+                    button.Enabled = state;
+                }
         }
 
         public void ToogleMiniled()
@@ -797,7 +831,6 @@ namespace GHelper
 
         public void SetScreen(int frequency = -1, int overdrive = -1, int miniled = -1)
         {
-
             if (NativeMethods.GetRefreshRate() < 0) // Laptop screen not detected or has unknown refresh rate
             {
                 InitScreen();
@@ -1697,6 +1730,16 @@ namespace GHelper
             checkStartup.CheckedChanged -= CheckStartup_CheckedChanged;
             checkStartup.Checked = status;
             checkStartup.CheckedChanged += CheckStartup_CheckedChanged;
+        }
+
+        public void SetEnforceRefreshRateCheck(bool status)
+        {
+            checkEnforceRefreshRate.CheckedChanged -= CheckEnforceRefreshRate_CheckedChanged;
+            checkEnforceRefreshRate.Checked = status;
+            checkEnforceRefreshRate.CheckedChanged += CheckEnforceRefreshRate_CheckedChanged;
+            if (!status) {return;}
+
+            ScreenButtons_SetState(false);
         }
 
         public void SetBatteryChargeLimit(int limit)

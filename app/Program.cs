@@ -82,8 +82,7 @@ namespace GHelper
             settingsForm.InitAura();
             settingsForm.InitMatrix();
             settingsForm.SetStartupCheck(Startup.IsScheduled());
-
-
+            
             SetAutoModes();
 
             // Subscribing for system power change events
@@ -100,7 +99,7 @@ namespace GHelper
                 SettingsToggle(action);
             }
 
-
+            settingsForm.SetEnforceRefreshRateCheck(RefreshRateEnforcer.IsEnforced());
 
             Application.Run();
 
@@ -143,7 +142,7 @@ namespace GHelper
 
             isPlugged = SystemInformation.PowerStatus.PowerLineStatus;
             Logger.WriteLine("AutoSetting for " + isPlugged.ToString());
-
+            
             inputDispatcher.Init();
 
             settingsForm.SetBatteryChargeLimit(AppConfig.getConfig("charge_limit"));
@@ -168,6 +167,11 @@ namespace GHelper
 
             Logger.WriteLine("Power Mode Changed");
             SetAutoModes();
+            
+            if ( !RefreshRateEnforcer.IsEnforced() ) {return;}
+            settingsForm.ScreenButtons_SetState(false);
+            RefreshRateEnforcer.PowerModeChangeHook();
+            
         }
 
 
